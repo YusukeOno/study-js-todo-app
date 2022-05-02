@@ -10,7 +10,9 @@
 	"extensions": {
 		"recommendations": [
 			// ブラウザで確認するためのローカルサーバーを立ち上げる
-			"ritwickdey.LiveServer"
+			"ritwickdey.LiveServer",
+			// ソース整形するためのフォーマッタ
+			"esbenp.prettier-vscode"
 		]
 	}
 }
