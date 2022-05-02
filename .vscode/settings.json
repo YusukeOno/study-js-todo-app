@@ -1,0 +1,6 @@
+{
+    // ファイル保存時に変更部分を対象にフォーマッタでソース整形する
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "modifications",
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
