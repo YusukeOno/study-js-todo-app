@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"liveServer.settings.port": 5502
+	},
+	"extensions": {
+		"recommendations": [
+			// ブラウザで確認するためのローカルサーバーを立ち上げる
+			"ritwickdey.LiveServer"
+		]
+	}
+}
