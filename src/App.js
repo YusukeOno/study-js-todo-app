@@ -1,9 +1,12 @@
+import { TodoListModel } from "./model/TodoListModel.js";
+import { TodoItemModel } from "./model/TodoItemModel.js";
 import { element, render } from "./view/html-util.js";
 
 console.log("App.js: loaded");
 export class App {
     constructor() {
-        console.log("App initialized");
+        // 1. TodoListの初期化
+        this.todoListModel = new TodoListModel();
     }
 
     mount() {
@@ -13,12 +16,29 @@ export class App {
         const containerElement = document.querySelector("#js-todo-list");
         const todoItemCountElement = document.querySelector("#js-todo-count");
 
-        // TodoリストをまとめるList要素
-        const todoListElement = element`<ul />`;
+        // 2. TodoListModelの状態が更新されたら表示を更新する
+        this.todoListModel.onChange(() => {
+            // TodoリストをまとめるList要素
+            const todoListElement = element`<ul />`;
 
-        // Todoアイテム数
-        let todoItemCount = 0;
+            // それぞれのTodoItem要素をtodoListElement以下へ追加する
+            const todoItems = this.todoListModel.getTodoItems();
+            todoItems.forEach((item) => {
+                // 追加するTodoアイテムの要素(li要素)を作成する
+                const todoItemElement = element`<li>${inputElement.value}</li>`;
 
+                // TodoアイテムをtodoListElementに追加する
+                todoListElement.appendChild(todoItemElement);
+            });
+
+            // コンテナ要素の中身をTodoリストをあm止めるList要素で上書きする
+            render(todoListElement, containerElement);
+
+            // アイテム数の表示を更新
+            todoItemCountElement.textContent = `Todoアイテム数: ${this.todoListModel.getTotalCount()}`;
+        });
+
+        // 3. フォームを送信したら、新しいTodoItemModelを追加する
         // form要素で発生したsubmitイベントを受け取る
         formElement.addEventListener("submit", (event) => {
             // この中はイベントが発生した時に呼ばれるコールバック関数（イベントリスナー）
@@ -29,21 +49,13 @@ export class App {
             // cf. https://qiita.com/yokoto/items/27c56ebc4b818167ef9e
             event.preventDefault();
 
-            // 確認のため入力した値をコンソールログに出力する
-            console.log(`入力欄の値:  ${inputElement.value}`);
-
-            // 追加するTodoアイテムの要素(li要素)を作成する
-            const todoItemElement = element`<li>${inputElement.value}</li>`;
-
-            // TodoアイテムをtodoListElementに追加する
-            todoListElement.appendChild(todoItemElement);
-
-            // コンテナ要素の中身をTodoリストをまとめるList要素で上書きする
-            render(todoListElement, containerElement);
-
-            // Todoアイテム数を+1氏、表示されているテキストを更新する
-            todoItemCount += 1;
-            todoItemCountElement.textContent = `Todoアイテム数: ${todoItemCount}`;
+            // 新しいTodoItemをTodoListへ追加する
+            this.todoListModel.addTodo(
+                new TodoItemModel({
+                    title: inputElement.value,
+                    completed: false,
+                })
+            );
 
             // 入力欄を空文字にしてリセットする
             inputElement.value = "";
