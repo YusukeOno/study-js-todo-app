@@ -2,6 +2,8 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
+    // production or development
+    mode: "development",
     // "plugins" エントリーを追加
     plugins: [
         // プラグインのインスタンスを作成
